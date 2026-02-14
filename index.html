@@ -12,10 +12,280 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <h1>Hello World!</h1>
+
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!-- Custom JS -->
     <script src="scripts/main.js"></script>
+    <!--HEADER-->
+  <header class="site-header">
+    <nav class="nav-bar">
+      <!-- menu links -->
+      <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#booking">Booking</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ul>
+
+      <!-- logo -->
+      <a class="nav-logo" href="#home">
+       <img src="images/logo.png" alt="Hair & Beyond logo">
+      </a>
+    </nav>
+  </header>
+
+  <!-- (BOOK NOW) -->
+  <main id="home">
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Hair & Beyond</h1>
+        <p>Your beauty, our passion.</p>
+
+        <!-- Book Now button -->
+        <a class="btn-book" href="#booking">Book Now</a>
+      </div>
+    </section>
+
+    <!--SERVICES  -->
+    <section id="services" class="section services">
+      <h2>Services</h2>
+
+      <div class="services-grid">
+        <!-- Service 1 -->
+        <article class="service-card">
+          <img src="images/cut.jpg" alt="Haircut">
+          <div class="service-image-placeholder">
+           
+          </div>
+
+          <h3>Haircut</h3>
+          <p>Women's haircuts with professional styling</p>
+        </article>
+
+        <!-- Service2 -->
+        <article class="service-card">
+          <img src="images/image4.jpg" alt="Hair Coloring">
+          <div class="service-image-placeholder">
+          </div>
+
+          <h3>Coloring</h3>
+          <p>Full color, root touch-ups, highlights, balayage, and toning.</p>
+        </article>
+
+        <!-- Service3-->
+        <article class="service-card">
+          
+          <img src="images/styling1.jpg" alt="Special Occasion Styling">
+          <div class="service-image-placeholder">
+          </div>
+
+          <h3>Styling</h3>
+          <p>Blowouts, curls, straightening, and event-ready looks.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="team" class="section team">
+      <h2>Our Team</h2>
+      <!-- Member 1 -->
+      <div class="team-grid">
+        <article class="team-card">
+          <img src="images/stylist1.png" alt="Tina">
+          <div class="team-image-placeholder">
+          </div>
+
+          <h3>Tina</h3>
+          <p class="role">Hair Stylist</p>
+          <p class="experience">9+ years experience</p>
+        </article>
+
+        <!-- Member 2 -->
+        <article class="team-card">
+          <img src="images/stylist2.png" alt="Daniella">
+          <div class="team-image-placeholder">
+          </div>
+
+          <h3>Daniella</h3>
+          <p class="role">Hair Color Specialist</p>
+          <p class="experience">13+ years experience</p>
+
+        </article>
+        <!-- Member 3 -->
+        <article class="team-card">
+          <img src="images/manager.png" alt="Laura">
+          <div class="team-image-placeholder">
+            
+          </div>
+
+          <h3>Laura</h3>
+          <p class = "role"> Manager & Professional HairStyling </p>
+          <p class="experience">15+ years experience</p>
+
+        </article>
+      </div>
+    </section>
+
+    <!--REVIEWS -->
+    <section class="section reviews">
+      <h2>Reviews</h2>
+
+      <div class="reviews-box">
+        <article class="review">
+          <p>"Amazing service and super friendly staff!"</p>
+          <span>- Sarah</span>
+        </article>
+
+        <article class="review">
+          <p>"Loved my hair color, exactly what I wanted."</p>
+          <span>- Rain</span>
+        </article>
+
+        <article class="review">
+          <p>"Clean salon, great vibe, and perfect results."</p>
+          <span>- Lola</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- BOOKING-->
+    <section id="booking" class="section booking">
+  <h2>Booking</h2>
+  <p>Please fill out the form below for an appointment.</p>
+
+  <form class="booking-form">
+
+    <!-- Row 1 -->
+    <div class="form-col">
+      <div class="form-row">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" name="fullName" placeholder="Your full name" required>
+      </div>
+
+      <div class="form-row">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" placeholder="(...) 000-0000" required>
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="form-col">
+      <div class="form-row">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@email.com" required>
+      </div>
+
+      <div class="form-row">
+        <label for="service">Select Service</label>
+        <select id="service" name="service" required>
+          <option value="">-- Choose a service --</option>
+          <option value="haircut">Haircut</option>
+          <option value="coloring">Hair Coloring</option>
+          <option value="styling">Styling</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="form-col">
+      <div class="form-row">
+        <label for="stylist">Preferred Stylist</label>
+        <select id="stylist" name="stylist">
+          <option value="">No preference</option>
+          <option value="tina">Tina</option>
+          <option value="daniella">Daniella</option>
+          <option value="laura">Laura</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="date">Appointment Date</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+    </div>
+
+    <!-- Row 4  -->
+    <div class="form-row">
+      <label for="notes">Notes</label>
+      <textarea id="notes" name="notes" rows="4"
+        placeholder="Any details you want us to know?"></textarea>
+    </div>
+
+    <button type="submit" class="booking-submit">Submit Booking</button>
+  </form>
+</section>
+
+
+    <!--CONTACT -->
+    <section id="contact" class="section contact">
+      <h2>Contact Us</h2>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Opening Hours</h3>
+          <ul class="hours">
+            <li>Mon - Fri: 9:00 AM - 6:00 PM</li>
+            <li>Saturday: 10:00 AM - 5:00 PM</li>
+            <li>Sunday: Closed</li>
+          </ul>
+
+          <h3>Phone</h3>
+          <p>613-465-0978</p>
+        </div>
+
+        <div class="contact-form">
+          <h3>Send a Message</h3>
+          <form>
+            <label>
+              Name
+              <input type="text" name="name" placeholder="Your name" />
+            </label>
+
+            <label>
+              Email
+              <input type="email" name="email" placeholder="hairByond@hotmail.com" />
+            </label>
+
+            <label>
+              Message
+              <textarea name="message" rows="4" placeholder="Write your message..."></textarea>
+            </label>
+
+            <button type="submit">Send</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER  -->
+  <footer class="site-footer">
+    <div class="footer-content">
+
+      <!-- Social icons -->
+      <div class="social">
+        <h4>Follow Us</h4>
+
+        <div class="social-icons-placeholder">
+
+          <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+          <a href="#"><img src="images/insta.png" alt="Instagram"></a>
+          <a href="#"><img src="images/phone.png" alt="Phone"></a>
+      
+
+        </div>
+      </div>
+
+      <!-- Extra info -->
+      <div class="footer-hours">
+        <h4>Opening Hours</h4>
+        <p>Mon - Fri: 9AM - 6PM</p>
+        <p>Sat: 10AM - 5PM</p>
+        <p>Sun: Closed</p>
+      </div>
+    </div>
+
+    <p class="signature"> by Jessy, Kate, Onur</p>
+  </footer>
 </body>
 </html>
