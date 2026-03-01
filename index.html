@@ -181,9 +181,9 @@
         <label for="service">Select Service</label>
         <select id="service" name="service" required>
           <option value="">-- Choose a service --</option>
-          <option value="haircut">Haircut</option>
-          <option value="coloring">Hair Coloring</option>
-          <option value="styling">Styling</option>
+          <option value="Haircut">Haircut</option>
+          <option value="Coloring">Hair Coloring</option>
+          <option value="Styling">Styling</option>
         </select>
       </div>
     </div>
@@ -194,9 +194,9 @@
         <label for="stylist">Preferred Stylist</label>
         <select id="stylist" name="stylist">
           <option value="">No preference</option>
-          <option value="tina">Tina</option>
-          <option value="daniella">Daniella</option>
-          <option value="laura">Laura</option>
+          <option value="Tina">Tina</option>
+          <option value="Daniella">Daniella</option>
+          <option value="Laura">Laura</option>
         </select>
       </div>
 
@@ -216,6 +216,48 @@
     <button type="submit" class="booking-submit">Submit Booking</button>
   </form>
 </section>
+
+<!-- PAYMENT -->
+  <section id="payment" class="section payment" style="display:none;">
+    <h2>Payment Details</h2>
+    <p>Please enter your card information to confirm your booking.</p>
+
+    <form class="payment-form">
+
+      <div class="form-row">
+        <label for="cardName">Name on Card</label>
+        <input type="text" id="cardName" placeholder="Full name as on card" />
+      </div>
+
+      <div class="form-row">
+        <label for="cardNumber">Card Number</label>
+        <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" />
+      </div>
+
+      <div class="form-col">
+        <div class="form-row">
+          <label for="cardExpiry">Expiry Date</label>
+          <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" />
+        </div>
+        <div class="form-row">
+          <label for="cardCsc">CSC / CVV</label>
+          <input type="text" id="cardCsc" placeholder="123" maxlength="4" />
+        </div>
+      </div>
+
+      <button type="submit" class="booking-submit">Confirm Booking</button>
+    </form>
+  </section>
+
+  <!-- CONFIRMATION -->
+  <section id="confirmation" class="section confirmation" style="display:none;">
+    <div class="confirmation-box">
+      <h2>Booking Confirmed!</h2>
+      <p>Thank you for booking with Hair &amp; Beyond. Here are your appointment details:</p>
+      <ul id="confirmation-details"></ul>
+      <p>We look forward to seeing you!</p>
+    </div>
+  </section>
 
 
     <!--CONTACT -->

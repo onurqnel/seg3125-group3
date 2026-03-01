@@ -31,6 +31,8 @@ body {
 .section.team,
 .section.reviews,
 .section.booking,
+.section.payment,
+.section.confirmation,
 .section.contact {
   background: rgba(255, 255, 255, 0.92);
   border-radius: 18px;
@@ -447,6 +449,77 @@ booking p {
   margin: 18px auto 0;
   opacity: 0.8;
   font-size: 0.95rem;
+}
+
+/* ----------- Payment ----------- */
+.payment-form {
+  margin-top: 25px;
+  max-width: 850px;
+  display: grid;
+  gap: 18px;
+}
+
+.payment-form .form-row {
+  display: grid;
+  gap: 8px;
+}
+
+.payment-form label {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #111;
+}
+
+.payment-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: white;
+}
+
+/* ----------- Confirmation ----------- */
+.confirmation-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 30px 28px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.10);
+  max-width: 600px;
+}
+
+.confirmation-box h2 {
+  margin: 0 0 10px;
+  color: #b49b7e;
+  font-size: 1.8rem;
+  font-weight: 900;
+}
+
+.confirmation-box p {
+  color: #444;
+  margin: 0 0 16px;
+}
+
+.confirmation-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: grid;
+  gap: 10px;
+}
+
+.confirmation-box ul li {
+  padding: 12px 16px;
+  background: rgba(180, 155, 126, 0.10);
+  border-left: 5px solid #b49b7e;
+  border-radius: 10px;
+  color: #222;
+  font-size: 1rem;
+}
+
+.confirmation-box ul li strong {
+  color: #111;
+  margin-right: 6px;
 }
 
 /* ------------ Responsive ----------- */

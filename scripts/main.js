@@ -1,173 +1,202 @@
-
 document.addEventListener("DOMContentLoaded", () => {
-  const stylistSelect = document.getElementById("stylist");
-  const dateInput = document.getElementById("date");
-  const timeSelect = document.getElementById("time");
-  
-  // off days (sunday)
-  //working hours Mon-fri 9-6 and sat 10-5
-  // working days for the sylist 
-  const stylistOffDay = {
-    "":[], // No preference 
-    tina:[2],
-    daniella:[1],
-    laura:[5],
-};
-// stylist hours 
-const stylistHours = {
-    "": {start:9, end: 18},
-    tina:{start:9, end:16},
-    daniella:{start:11, end:18},
-    laura: {start:9, end:18}
-};
-const stylistOffDates = {
-    "": [],
-    tina: [Monday],
-    daniella: [],
-    laura: []
-  };
 
-  let picker = null;
-
-function resetTime() {
-    timeSelect.innerHTML = `<option value="">Select a time</option>`;
-    timeSelect.disabled = true;
-  }
-  function generateTimeSlots(stylistKey) {
-    resetTime();
-    const hours = stylistHours[stylistKey] || stylistHours[""];
-    const start = hours.start;
-    const end = hours.end;
-    for (let h = hours.start; h < hours.end; h++) {
-    const hh = String(h).padStart(2, "0");
-    const time = `${hh}:00`;
-
-    const opt = document.createElement("option");
-    opt.value = time;
-    opt.textContent = formatTo12Hour(time); 
-
-    timeSelect.appendChild(opt);
-}
-timeSelect.disabled = false;
-  }
-  function isDisabledDate(dateObj, stylistKey) {
-    const day = dateObj.getDay();
-
-    // Disable weekends (Sat + Sun)
-    if (day === 0 || day === 6) return true;
-
-    // Disable stylist off-days
-    const offDays = stylistOffDays[stylistKey] || [];
-    if (offDays.includes(day)) return true;
-
-    return false;
+  // ── Helpers ──────────────────────────────────────────────────────────────
+  function showError(input, message) {
+    clearError(input);
+    input.style.borderColor = 'red';
+    const error = document.createElement('span');
+    error.className = 'error-msg';
+    error.style.cssText = 'color:red; font-size:0.8rem; display:block; margin-top:4px;';
+    error.textContent = message;
+    input.parentNode.appendChild(error);
   }
 
-  function buildPicker(stylistKey) {
-    if (picker) picker.destroy();
-
-    picker = flatpickr(dateInput, {
-      dateFormat: "Y-m-d",
-      minDate: "today",
-      disable: [(d) => isDisabledDate(d, stylistKey)],
-      onChange: (selectedDates) => {
-        if (selectedDates.length > 0) generateTimeSlots(stylistKey);
-        else resetTime();
-      }
-    });
+  function clearError(input) {
+    input.style.borderColor = '';
+    const existing = input.parentNode.querySelector('.error-msg');
+    if (existing) existing.remove();
   }
 
-  // Init
-  resetTime();
-  buildPicker(stylistSelect.value);
-  stylistSelect.addEventListener("change", (e) => {
-    dateInput.value = "";
-    resetTime();
-    buildPicker(e.target.value);
-  });
-
-  document.querySelector(".booking-form").addEventListener("submit", (e) => {
-    if (!dateInput.value || !timeSelect.value) {
-      e.preventDefault();
-      alert("Please select an appointment date and time.");
+  // ── Phone auto-format ─────────────────────────────────────────────────────
+  document.getElementById('phone').addEventListener('input', function () {
+    const digits = this.value.replace(/\D/g, '').slice(0, 10);
+    if (digits.length <= 3) {
+      this.value = digits;
+    } else if (digits.length <= 6) {
+      this.value = `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    } else {
+      this.value = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
     }
   });
+
+  // ── Card number auto-format (groups of 4) ────────────────────────────────
+  document.getElementById('cardNumber').addEventListener('input', function () {
+    const digits = this.value.replace(/\D/g, '').slice(0, 16);
+    this.value = digits.replace(/(.{4})/g, '$1 ').trim();
+  });
+
+  // ── Expiry auto-format (MM/YY) ───────────────────────────────────────────
+  document.getElementById('cardExpiry').addEventListener('input', function () {
+    const digits = this.value.replace(/\D/g, '').slice(0, 4);
+    if (digits.length <= 2) {
+      this.value = digits;
+    } else {
+      this.value = `${digits.slice(0, 2)}/${digits.slice(2)}`;
+    }
+  });
+
+  // ── CSC: digits only ─────────────────────────────────────────────────────
+  document.getElementById('cardCsc').addEventListener('input', function () {
+    this.value = this.value.replace(/\D/g, '').slice(0, 4);
+  });
+
+  // ── Booking form ─────────────────────────────────────────────────────────
+  // Store booking summary to use later in confirmation
+  let bookingSummary = {};
+
+  document.querySelector('.booking-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    let valid = true;
+
+    // Full Name
+    const nameInput = document.getElementById('fullName');
+    const nameParts = nameInput.value.trim().split(/\s+/);
+    if (nameParts.length < 2 || nameParts.some(p => p.length < 1)) {
+      showError(nameInput, 'Please enter your first and last name.');
+      valid = false;
+    } else {
+      clearError(nameInput);
+    }
+
+    // Phone
+    const phoneInput = document.getElementById('phone');
+    const digitsOnly = phoneInput.value.replace(/\D/g, '');
+    if (digitsOnly.length !== 10) {
+      showError(phoneInput, 'Phone number must be exactly 10 digits.');
+      valid = false;
+    } else {
+      clearError(phoneInput);
+    }
+
+    // Email
+    const emailInput = document.getElementById('email');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailInput.value.trim())) {
+      showError(emailInput, 'Please enter a valid email address.');
+      valid = false;
+    } else {
+      clearError(emailInput);
+    }
+
+    // Date
+    const dateInput = document.getElementById('date');
+    const today = new Date().toISOString().split('T')[0];
+    if (!dateInput.value || dateInput.value < today) {
+      showError(dateInput, 'Please select a valid future date.');
+      valid = false;
+    } else {
+      const selected = new Date(dateInput.value + 'T00:00:00');
+      const day = selected.getDay();
+      if (day === 0 || day === 6) {
+        showError(dateInput, 'We are closed on weekends. Please select a weekday.');
+        valid = false;
+      } else {
+        clearError(dateInput);
+      }
+    }
+
+    if (valid) {
+      // Save summary for confirmation screen
+      const stylistVal = document.getElementById('stylist').value;
+      const serviceVal = document.getElementById('service').value;
+      bookingSummary = {
+        name: nameInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        email: emailInput.value.trim(),
+        service: serviceVal || 'Not selected',
+        stylist: stylistVal || 'No preference',
+        date: dateInput.value
+      };
+
+      // Hide booking, show payment
+      document.getElementById('booking').style.display = 'none';
+      document.getElementById('payment').style.display = 'block';
+      document.getElementById('payment').scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  // ── Payment form ──────────────────────────────────────────────────────────
+  document.querySelector('.payment-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    let valid = true;
+
+    // Name on card
+    const cardName = document.getElementById('cardName');
+    const cardNameParts = cardName.value.trim().split(/\s+/);
+    if (cardNameParts.length < 2) {
+      showError(cardName, 'Please enter the full name as it appears on your card.');
+      valid = false;
+    } else {
+      clearError(cardName);
+    }
+
+    // Card number (must be 16 digits)
+    const cardNumber = document.getElementById('cardNumber');
+    const cardDigits = cardNumber.value.replace(/\D/g, '');
+    if (cardDigits.length !== 16) {
+      showError(cardNumber, 'Card number must be 16 digits.');
+      valid = false;
+    } else {
+      clearError(cardNumber);
+    }
+
+    // Expiry (MM/YY, not in the past)
+    const cardExpiry = document.getElementById('cardExpiry');
+    const expiryMatch = cardExpiry.value.match(/^(\d{2})\/(\d{2})$/);
+    let expiryValid = false;
+    if (expiryMatch) {
+      const month = parseInt(expiryMatch[1]);
+      const year = 2000 + parseInt(expiryMatch[2]);
+      const now = new Date();
+      const expDate = new Date(year, month - 1, 1); // first of expiry month
+      if (month >= 1 && month <= 12 && expDate >= new Date(now.getFullYear(), now.getMonth(), 1)) {
+        expiryValid = true;
+      }
+    }
+    if (!expiryValid) {
+      showError(cardExpiry, 'Please enter a valid expiry date (MM/YY).');
+      valid = false;
+    } else {
+      clearError(cardExpiry);
+    }
+
+    // CSC (3 or 4 digits)
+    const cardCsc = document.getElementById('cardCsc');
+    if (!/^\d{3,4}$/.test(cardCsc.value)) {
+      showError(cardCsc, 'CSC must be 3 or 4 digits.');
+      valid = false;
+    } else {
+      clearError(cardCsc);
+    }
+
+    if (valid) {
+      // Hide payment, show confirmation
+      document.getElementById('payment').style.display = 'none';
+      document.getElementById('confirmation').style.display = 'block';
+
+      // Populate confirmation details
+      const detailsList = document.getElementById('confirmation-details');
+      detailsList.innerHTML = `
+        <li><strong>Name:</strong> ${bookingSummary.name}</li>
+        <li><strong>Email:</strong> ${bookingSummary.email}</li>
+        <li><strong>Phone:</strong> ${bookingSummary.phone}</li>
+        <li><strong>Service:</strong> ${bookingSummary.service}</li>
+        <li><strong>Stylist:</strong> ${bookingSummary.stylist}</li>
+        <li><strong>Date:</strong> ${bookingSummary.date}</li>
+      `;
+
+      document.getElementById('confirmation').scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
 });
-
-document.getElementById('phone').addEventListener('input', function () {
-  const digits = this.value.replace(/\D/g, '').slice(0, 10);
-  if (digits.length <= 3) {
-    this.value = digits;
-  } else if (digits.length <= 6) {
-    this.value = `(${digits.slice(0,3)}) ${digits.slice(3)}`;
-  } else {
-    this.value = `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`;
-  }
-});
-
-document.querySelector('.booking-form').addEventListener('submit', function (e) {
-  e.preventDefault();
-  let valid = true;
-
-  // --- Full Name ---
-  const nameInput = document.getElementById('fullName');
-  const nameParts = nameInput.value.trim().split(/\s+/);
-  if (nameParts.length < 2 || nameParts.some(p => p.length < 1)) {
-    showError(nameInput, 'Please enter your first and last name.');
-    valid = false;
-  } else {
-    clearError(nameInput);
-  }
-
-  // --- Phone ---
-  const phoneInput = document.getElementById('phone');
-  const digitsOnly = phoneInput.value.replace(/\D/g, '');
-  if (digitsOnly.length !== 10) {
-    showError(phoneInput, 'Phone number must be exactly 10 digits.');
-    valid = false;
-  } else {
-    clearError(phoneInput);
-  }
-
-  // --- Email ---
-  const emailInput = document.getElementById('email');
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(emailInput.value.trim())) {
-    showError(emailInput, 'Please enter a valid email address.');
-    valid = false;
-  } else {
-    clearError(emailInput);
-  }
-
-  // --- Date: must not be in the past ---
-  const dateInput = document.getElementById('date');
-  const today = new Date().toISOString().split('T')[0];
-  if (!dateInput.value || dateInput.value < today) {
-    showError(dateInput, 'Please select a future date.');
-    valid = false;
-  } else {
-    clearError(dateInput);
-  }
-
-  if (valid) {
-    // form is good — submit or show success message
-    alert('Booking submitted successfully!');
-    this.reset();
-  }
-});
-
-function showError(input, message) {
-  clearError(input); // avoid duplicates
-  input.style.borderColor = 'red';
-  const error = document.createElement('span');
-  error.className = 'error-msg';
-  error.style.cssText = 'color:red; font-size:0.8rem; display:block; margin-top:4px;';
-  error.textContent = message;
-  input.parentNode.appendChild(error);
-}
-
-function clearError(input) {
-  input.style.borderColor = '';
-  const existing = input.parentNode.querySelector('.error-msg');
-  if (existing) existing.remove();
-}
